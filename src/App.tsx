@@ -1,7 +1,8 @@
 import SideBar from "./components/SideBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { listItem } from "./lib/types";
 import ListItem from "./components/ListItem";
+import { Accordion } from "./components/ui/accordion";
 function App() {
   const [listState, setListState] = useState<listItem[]>([
     {
@@ -100,13 +101,32 @@ function App() {
   };
 
   return (
-    <>
+    <div className="flex">
       <SideBar addNewRootChild={addListItemChild}>
-        {listState.map((item, index) => (
-          <ListItem key={`${item.name}-${index}`} item={item} level={0} />
-        ))}
+        <Accordion type="multiple">
+          {listState.map((item, index) => (
+            <ListItem
+              key={`${item.name}-${index}`}
+              item={item}
+              level={0}
+              pathToSelf={[index]}
+              changeName={changeListItemName}
+              addChildren={addListItemChild}
+            />
+          ))}
+        </Accordion>
       </SideBar>
-    </>
+      <div className="p-10 pt-3 hidden md:block md:w-full lg:w-[50%] h-screen overflow-y-auto">
+        <div className="h-11">
+          <h1 className="text-2xl font-bold">Component State</h1>
+        </div>
+        <pre className="bg-slate-800 p-5">
+          <code className="text-white">
+            {JSON.stringify(listState, null, 2)}
+          </code>
+        </pre>
+      </div>
+    </div>
   );
 }
 

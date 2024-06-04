@@ -1,18 +1,18 @@
 import { listItem } from "@/lib/types";
 import {
-  Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import ListItemName from "./ListItemName";
+import { useEffect, useRef, useState } from "react";
 interface ListItemProps {
   item: listItem;
   level: number;
   pathToSelf: number[];
   changeName: (path: number[], newName: string) => void;
-  addChildren: (path: number[], newChildren: listItem[]) => void;
+  addChildren: (path: number[], newChild: listItem) => void;
 }
 const ListItem = ({
   item,
@@ -24,29 +24,45 @@ const ListItem = ({
   const handleSelfNameChange = (newName: string) => {
     changeName(pathToSelf, newName);
   };
+  const accordionTriggerRef = useRef<HTMLDivElement>(null); // Add type annotation to useRef
+  const addChildToSelf = () => {
+    addChildren(pathToSelf, {
+      name: "New Item",
+      children: [],
+    });
+  };
+  const accordianValue = pathToSelf.join("-").concat(item.name);
+
   return (
-    <Accordion type="single" collapsible>
-      <AccordionItem
-        value={item.name}
-        className={cn({
-          "pl-2": level === 1,
-          "pl-4": level === 2,
+    <AccordionItem value={accordianValue} ref={accordionTriggerRef}>
+      <AccordionTrigger
+        className={cn("border border-transparent hover:border-blue-400 pr-3", {
+          "pl-3": level === 0,
+          "pl-5": level === 1,
+          "pl-8": level === 2,
         })}
       >
-        <AccordionTrigger>
-          <ListItemName name={item.name} />
-        </AccordionTrigger>
-        <AccordionContent>
-          {item.children.map((child, index) => (
-            <ListItem
-              key={`${child.name}-${index}`}
-              item={child}
-              level={level + 1}
-            />
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+        <ListItemName
+          name={item.name}
+          handleNameChange={handleSelfNameChange}
+          addChildren={addChildToSelf}
+          accordionTriggerRef={accordionTriggerRef}
+          level={level}
+        />
+      </AccordionTrigger>
+      <AccordionContent>
+        {item.children.map((child, index) => (
+          <ListItem
+            key={`${child.name}-${index}`}
+            item={child}
+            level={level + 1}
+            pathToSelf={[...pathToSelf, index]}
+            changeName={changeName}
+            addChildren={addChildren}
+          />
+        ))}
+      </AccordionContent>
+    </AccordionItem>
   );
 };
 
