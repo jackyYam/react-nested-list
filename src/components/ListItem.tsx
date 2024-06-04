@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import ListItemName from "./ListItemName";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 interface ListItemProps {
   item: listItem;
   level: number;
@@ -32,7 +32,7 @@ const ListItem = ({
     });
   };
   const accordianValue = pathToSelf.join("-").concat(item.name);
-
+  const contentTestId = `content-${pathToSelf.join("-")}`;
   return (
     <AccordionItem value={accordianValue} ref={accordionTriggerRef}>
       <AccordionTrigger
@@ -48,9 +48,10 @@ const ListItem = ({
           addChildren={addChildToSelf}
           accordionTriggerRef={accordionTriggerRef}
           level={level}
+          path={pathToSelf}
         />
       </AccordionTrigger>
-      <AccordionContent>
+      <AccordionContent data-testid={contentTestId}>
         {item.children.map((child, index) => (
           <ListItem
             key={`${child.name}-${index}`}

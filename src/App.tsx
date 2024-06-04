@@ -3,91 +3,14 @@ import { useState } from "react";
 import type { listItem } from "./lib/types";
 import ListItem from "./components/ListItem";
 import { Accordion } from "./components/ui/accordion";
-function App() {
-  const [listState, setListState] = useState<listItem[]>([
-    {
-      name: "Item 1",
-      children: [
-        {
-          name: "Item 1.1",
-          children: [
-            {
-              name: "Item 1.1.1",
-              children: [],
-            },
-            {
-              name: "Item 1.1.2",
-              children: [],
-            },
-          ],
-        },
-        {
-          name: "Item 1.2",
-          children: [],
-        },
-      ],
-    },
-    {
-      name: "Item 2",
-      children: [
-        {
-          name: "Item 2.1",
-          children: [],
-        },
-        {
-          name: "Item 2.2",
-          children: [
-            {
-              name: "Item 2.2.1",
-              children: [],
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+import { initialData } from "./lib/initialData";
+import { changeName, addChild } from "./lib/helpers";
 
-  const changeName = (
-    list: listItem[],
-    path: number[],
-    newName: string
-  ): listItem[] => {
-    return list.map((item, index) => {
-      if (index === path[0]) {
-        if (path.length === 1) {
-          return { ...item, name: newName };
-        } else if (item.children) {
-          return {
-            ...item,
-            children: changeName(item.children, path.slice(1), newName),
-          };
-        }
-      }
-      return item;
-    });
-  };
+function App() {
+  const [listState, setListState] = useState<listItem[]>(initialData);
 
   const changeListItemName = (path: number[], newName: string) => {
     setListState((prevState) => changeName(prevState, path, newName));
-  };
-  const addChild = (
-    list: listItem[],
-    path: number[],
-    newChild: listItem
-  ): listItem[] => {
-    return list.map((item, index) => {
-      if (index === path[0]) {
-        if (path.length === 1) {
-          return { ...item, children: [...(item.children || []), newChild] };
-        } else if (item.children) {
-          return {
-            ...item,
-            children: addChild(item.children, path.slice(1), newChild),
-          };
-        }
-      }
-      return item;
-    });
   };
 
   const addListItemChild = (path: number[], newChild: listItem) => {

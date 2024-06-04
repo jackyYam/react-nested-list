@@ -27,7 +27,7 @@ const SideBar = ({ children, addNewRootChild }: SideBarProps) => {
               setNewItemName("");
             }}
             disabled={newItemName.length === 0}
-            className="flex items-center"
+            className="flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Add

@@ -5,6 +5,7 @@ import { Pencil, Plus } from "lucide-react";
 interface ListItemNameProps {
   name: string;
   level: number;
+  path: number[];
   handleNameChange: (newName: string) => void;
   addChildren: () => void;
   accordionTriggerRef: React.RefObject<HTMLDivElement>;
@@ -15,6 +16,7 @@ const ListItemName = ({
   addChildren,
   accordionTriggerRef,
   level,
+  path,
 }: ListItemNameProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentName, setCurrentName] = useState(name);
@@ -24,7 +26,7 @@ const ListItemName = ({
     handleNameChange(currentName);
   };
   const showAddButton = level < 2;
-
+  const testId = path.join("-");
   return isEditing ? (
     <Input
       type="text"
@@ -38,16 +40,18 @@ const ListItemName = ({
       <div className="flex items-center gap-3">
         {currentName}
         <Pencil
+          data-testid={`pencil-edit-${testId}`}
           onClick={(e) => {
             e.preventDefault();
             setIsEditing(true);
           }}
-          className="w-4 h-4"
+          className="w-4 h-4 pencil-edit"
         />
       </div>
       {showAddButton && (
         <div
           className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+          data-testid={`add-button-${testId}`}
           onClick={(e) => {
             if (
               accordionTriggerRef.current?.getAttribute("data-state") === "open"
