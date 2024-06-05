@@ -38,8 +38,8 @@ const ListItem = ({
       <AccordionTrigger
         className={cn("border border-transparent hover:border-blue-400 pr-3", {
           "pl-3": level === 0,
-          "pl-5": level === 1,
-          "pl-8": level === 2,
+          "pl-6": level === 1,
+          "pl-9": level === 2,
         })}
       >
         <ListItemName

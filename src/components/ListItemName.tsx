@@ -37,8 +37,9 @@ const ListItemName = ({
     />
   ) : (
     <div className={"flex items-center justify-between w-full"}>
-      <div className="flex items-center gap-3">
-        {currentName}
+      <div className="flex items-center gap-3 text-wrap">
+        <p className="max-w-[400px] overflow-hidden">{currentName}</p>
+
         <Pencil
           data-testid={`pencil-edit-${testId}`}
           onClick={(e) => {
